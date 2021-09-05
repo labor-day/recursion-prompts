@@ -317,17 +317,55 @@ var buildList = function(value, length) {
 // fizzBuzz(5) // ['1','2','Fizz','4','Buzz']
 var fizzBuzz = function(n) {
 
+  var result = [];
+  var element = '';
+
+  element = n.toString();
+
+  if (n === 0) { return []; }
+  if (n % 3 === 0) { element = 'Fizz'; }
+  if (n % 5 === 0) { element = 'Buzz'; }
+  if (n % 3 === 0 && n % 5 === 0) { element = 'FizzBuzz'; }
+
+  result.push(element);
+  n--;
+
+  result = (fizzBuzz(n)).concat(result);
+
+  return result;
 };
 
 // 20. Count the occurrence of a value in a list.
 // countOccurrence([2,7,4,4,1,4], 4) // 3
 // countOccurrence([2,'banana',4,4,1,'banana'], 'banana') // 2
 var countOccurrence = function(array, value) {
+
+  var count = 0;
+
+  if (array.length === 0) { return 0; }
+  if (array[0] === value) { count++; }
+
+  array.shift();
+
+  count = count + countOccurrence(array, value);
+
+  return count;
 };
 
 // 21. Write a recursive version of map.
 // rMap([1,2,3], timesTwo); // [2,4,6]
 var rMap = function(array, callback) {
+
+  var result = [];
+
+  if (array.length === 0) { return []; }
+
+  result.push(callback(array[0]));
+  array = array.slice(1);
+
+  result = result.concat(rMap(array, callback));
+
+  return result;
 };
 
 // 22. Write a function that counts the number of times a key occurs in an object.
@@ -335,6 +373,19 @@ var rMap = function(array, callback) {
 // countKeysInObj(obj, 'r') // 1
 // countKeysInObj(obj, 'e') // 2
 var countKeysInObj = function(obj, key) {
+
+  var count = 0;
+
+  for (var currentKey in obj) {
+    if (currentKey === key) {
+      count++;
+    }
+    if (typeof obj[currentKey] === 'object') {
+      count += countKeysInObj(obj[currentKey], key)
+    }
+  }
+
+  return count;
 };
 
 // 23. Write a function that counts the number of times a value occurs in an object.
@@ -379,6 +430,7 @@ var replaceKeysInObj = function(obj, oldKey, newKey) {
 // fibonacci(5); // [0,1,1,2,3,5]
 // Note: The 0 is not counted.
 var fibonacci = function(n) {
+
 };
 
 // 26. Return the Fibonacci number located at index n of the Fibonacci sequence.
