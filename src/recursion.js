@@ -176,16 +176,55 @@ var palindrome = function(string) {
 // modulo(17,5) // 2
 // modulo(22,6) // 4
 var modulo = function(x, y) {
+
+  var negativeX = false;
+  if (x < 0) { x = 0 - x; negativeX = true; }
+  if (y < 0) { y = 0 - y; }
+  if (y === 0) { return NaN; }
+  if (y === x) { return 0; }
+  if (y > x && negativeX) { return -x; }
+  if (y > x) { return x; }
+
+  x = x - y;
+  if (negativeX) {
+    return 0 - modulo(x, y);
+  }
+  return modulo(x, y);
+
 };
 
 // 12. Write a function that multiplies two numbers without using the * operator or
 // Math methods.
 var multiply = function(x, y) {
+  var negativeX = false;
+  var negativeY = false;
+  if (x < 0) { x = 0 - x; negativeX = true; }
+  if (y < 0) { y = 0 - y; negativeY = true; }
+  if (y === 0) { return 0; }
+  if (y === 1) { return x; }
+  y--;
+  x = x + multiply(x, y);
+  if (negativeX && !negativeY) { return -x; }
+  if (!negativeX && negativeY) { return -x; }
+  if (negativeX && negativeY) { return x; }
+  return x;
 };
 
 // 13. Write a function that divides two numbers without using the / operator or
 // Math methods to arrive at an approximate quotient (ignore decimal endings).
 var divide = function(x, y) {
+
+  var answer = 0;
+  if (x < 0) { x = 0 - x; }
+  if (y < 0) { y = 0 - y; }
+  if (y === 0) { return NaN; }
+  if (x === y) { return 1; }
+  if (x === 0) { return 0; }
+  if (x < y) { return 0;}
+  x = x - y;
+  answer++;
+
+  return answer + divide(x, y);
 };
 
 // 14. Find the greatest common divisor (gcd) of two positive numbers. The GCD of two
@@ -194,6 +233,23 @@ var divide = function(x, y) {
 // http://www.cse.wustl.edu/~kjg/cse131/Notes/Recursion/recursion.html
 // https://www.khanacademy.org/computing/computer-science/cryptography/modarithmetic/a/the-euclidean-algorithm
 var gcd = function(x, y) {
+  if (x < 0 || y < 0) { return null; }
+  if (x === 0) { return y; }
+  if (y === 0) { return x; }
+
+  var temp;
+
+  if (y > x) {
+    temp = x;
+    x = y;
+    y = temp;
+  }
+
+  temp = x;
+  x = y;
+  y = temp % y;
+
+  return gcd(x, y);
 };
 
 // 15. Write a function that compares each character of two strings and returns true if
@@ -201,21 +257,57 @@ var gcd = function(x, y) {
 // compareStr('house', 'houses') // false
 // compareStr('tomato', 'tomato') // true
 var compareStr = function(str1, str2) {
+
+  if (str1.length > str2.length) { return false; }
+  if (str1.length === 0 && str2.length === 0) { return true; }
+  if (str1[0] !== str2[0]) { return false; }
+
+  str1 = str1.substring(1);
+  str2 = str2.substring(1);
+
+  return compareStr(str1, str2);
 };
 
 // 16. Write a function that accepts a string and creates an array where each letter
 // occupies an index of the array.
 var createArray = function(str) {
+
+  var result = [];
+
+  if (str.length === 0) { return result; }
+
+  result = result.concat(str[0]);
+  str = str.substring(1);
+
+  result = result.concat(createArray(str));
+  return result;
 };
 
 // 17. Reverse the order of an array
 var reverseArr = function(array) {
+  var result = [];
+
+  if (array.length === 0) { return result; }
+
+  result = result.concat(array[array.length - 1]);
+  array = array.slice(0, array.length - 1);
+
+  result = result.concat(reverseArr(array));
+  return result;
 };
 
 // 18. Create a new array with a given value and length.
 // buildList(0,5) // [0,0,0,0,0]
 // buildList(7,3) // [7,7,7]
 var buildList = function(value, length) {
+
+  var result = [];
+  if (length === 0) { return result; }
+  result.push(value);
+  length--;
+
+  result = result.concat(buildList(value, length));
+  return result;
 };
 
 // 19. Implement FizzBuzz. Given integer n, return an array of the string representations of 1 to n.
@@ -224,6 +316,7 @@ var buildList = function(value, length) {
 // For numbers which are multiples of both three and five, output “FizzBuzz” instead of the number.
 // fizzBuzz(5) // ['1','2','Fizz','4','Buzz']
 var fizzBuzz = function(n) {
+
 };
 
 // 20. Count the occurrence of a value in a list.
